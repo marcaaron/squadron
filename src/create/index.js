@@ -5,7 +5,7 @@ function create(){
   // Create Game Objects
   this.background1 = this.add.tileSprite(800,600,1600,1200, 'background')
   // initialize player
-  this.player = this.physics.add.image(100, 300, 'dot');
+  this.player = this.physics.add.sprite(100, 200, 'player1');
   // prevent player from moving outside of the screen
   this.player.setCollideWorldBounds(true);
   // set up controls up, down, left, right
@@ -14,6 +14,19 @@ function create(){
   this.hp = 1000;
   // initialize immunity state
   this.immunityActive = false;
+
+  this.anims.create({
+    key: "forward",
+    frames: this.anims.generateFrameNumbers("player1", { start: 1, end: 3 }),
+    frameRate: 8,
+    repeat: -1
+  });
+  this.anims.create({
+    key: "stop",
+    frames: [{ key: "player1", frame: 0 }],
+    frameRate: 20
+  });
+
 
   // set up bullet group
   this.bullets = this.physics.add.group({
