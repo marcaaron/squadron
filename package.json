@@ -1,0 +1,20 @@
+{
+  "name": "squadron",
+  "version": "0.1.0",
+  "description": "A Phaser 3 App",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "webpack",
+    "start": "yarn build && webpack-dev-server --port=8000"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack-dev-server": "^2.11.0",
+    "webpack": "^3.4.1",
+    "raw-loader": "^0.5.1"
+  },
+  "dependencies": {
+    "phaser": "^3.11.0"
+  }
+}
