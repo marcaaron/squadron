@@ -21,24 +21,31 @@ function create(){
     frameRate: 8,
     repeat: -1
   });
+
   this.anims.create({
     key: "stop",
     frames: [{ key: "player1", frame: 0 }],
     frameRate: 20
   });
 
+  this.anims.create({
+    key: "explode",
+    frames: this.anims.generateFrameNumbers("explosion", { start: 0, end: 6 }),
+    frameRate: 30,
+    hideOnComplete: true
+  });
 
   // set up bullet group
   this.bullets = this.physics.add.group({
     defaultKey: 'bullet',
     maxSize: 5
-  })
+  });
 
   // set up rules for bad guys and add them to group
   this.badguys = this.physics.add.group({
     defaultKey: 'badguy',
     maxSize: 5
-  })
+  });
 
   // listen for spacebar clicks and trigger the shoot function
   this.input.keyboard.on('keydown_SPACE', (e)=>{
@@ -75,7 +82,15 @@ function create(){
   }, 200)
 
   // detect collisions between bullets and badguys
-  this.physics.add.overlap(this.bullets, this.badguys, targetDestroy, null, this);
+  this.physics.add.overlap(this.bullets, this.badguys, targetDestroy, triggerExplosion, this);
+
+  function triggerExplosion(impactPoint){
+    const explosion = this.physics.add.sprite(impactPoint.x,impactPoint.y,'explosion');
+    explosion.anims.play('explode', true);
+    explosion.once('animationcomplete', ()=>{
+      explosion.destroy();
+    })
+  }
 
   // activateImmunity causes the player to blink and change colors
   // no damage can be taken during this time
