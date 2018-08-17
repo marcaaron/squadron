@@ -1,4 +1,4 @@
-import { attackPatterns } from './attackPatterns';
+import attackPatterns from './attackPatterns';
 import { targetDestroy, shoot } from './functions';
 
 function create(){
@@ -11,7 +11,7 @@ function create(){
   // set up controls up, down, left, right
   this.cursors = this.input.keyboard.createCursorKeys();
   // initialize hp
-  this.hp = 1000;
+  this.hp = 300;
   // initialize immunity state
   this.immunityActive = false;
 
@@ -44,7 +44,7 @@ function create(){
   // set up rules for bad guys and add them to group
   this.badguys = this.physics.add.group({
     defaultKey: 'badguy',
-    maxSize: 5
+    maxSize: 30
   });
 
   // listen for spacebar clicks and trigger the shoot function
@@ -54,32 +54,48 @@ function create(){
   });
 
   // set counter to zero
-  this.counter = 0;
-
   // this sets up a timed attack wave with a counter
   // if the counter reaches the maxSize of badguys the interval is claered
-  this.hoard = setInterval(()=>{
-      if(this.counter===attackPatterns.length-1){
-        clearInterval(this.hoard);
-      }
+  let waveCount = 0;
+  const attackWave = () => {
+    let enemyCount = 0;
+    const attackTimer = setInterval(()=>{
+    // if the next wave is null then set back to 0 index
+    if(waveCount > attackPatterns.length-1){
+      waveCount = 0;
+    }
+    const currentPattern = attackPatterns[waveCount];
+    // if total number of enemies created = the pattern length then stop creating enemies
+    if(enemyCount===currentPattern.length-1){
+      clearInterval(attackTimer);
+      // increment to call the next pattern wave
+      waveCount++;
+      // wait 5 seconds and start the next wave
+      setTimeout(()=>{
+        attackWave();
+      }, 5000);
+    }
+    // destructure properties for the current bad guy
+    const { startY, vX, deviate } = currentPattern[enemyCount];
+    // set the Y position X will always be the right edge of playfield
+    const badguy = this.badguys.get(800, startY);
+    // if we can create a badguy the make them active and visible
+    // set their body velocity
+    // and call the deviate function to define their movement pattern
+    if(badguy){
+      badguy.setActive(true);
+      badguy.setVisible(true);
+      badguy.body.velocity.x = vX;
+      deviate(badguy);
+    }
+    // increment counter so we can spawn the next baddie
+    enemyCount++;
+  // create a new bad guy every 300ms
+  }, 300)
 
-      // destructure properties for the current bad guy
-      const { startY, vX, deviate } = attackPatterns[this.counter];
-      // set the Y position X will always be the right edge of playfield
-      const badguy = this.badguys.get(800, startY);
-      // if we can create a badguy the make them active and visible
-      // set their body velocity
-      // and call the deviate function to define their movement pattern
-      if(badguy){
-        badguy.setActive(true);
-        badguy.setVisible(true);
-        badguy.body.velocity.x = vX;
-        deviate(badguy);
-      }
-      // increment counter so we can spawn the next baddie
-      this.counter++;
-    // create a new bad guy every 200ms
-  }, 200)
+  }
+
+  attackWave();
 
   // detect collisions between bullets and badguys
   this.physics.add.overlap(this.bullets, this.badguys, targetDestroy, triggerExplosion, this);

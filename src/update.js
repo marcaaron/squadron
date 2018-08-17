@@ -8,22 +8,22 @@ function update(){
 
   // controls
   if (this.cursors.up.isDown){
-    this.player.setVelocityY(-500);
+    this.player.setVelocityY(-700);
     this.player.setVelocityX(0);
     this.player.anims.play("stop", true);
   }
   else if (this.cursors.down.isDown){
-    this.player.setVelocityY(500);
+    this.player.setVelocityY(700);
     this.player.setVelocityX(0);
     this.player.anims.play("stop", true);
   }
   else if (this.cursors.left.isDown){
-    this.player.setVelocityX(-500);
+    this.player.setVelocityX(-700);
     this.player.setVelocityY(0);
     this.player.anims.play("stop", true);
   }
   else if (this.cursors.right.isDown){
-    this.player.setVelocityX(500);
+    this.player.setVelocityX(700);
     this.player.setVelocityY(0);
     this.player.anims.play("forward", true);
   }
