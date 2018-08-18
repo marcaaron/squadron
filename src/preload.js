@@ -11,6 +11,7 @@ function preload(){
     frameWidth: 200,
     frameHeight: 100
   });
+  this.load.image("bomb", "../assets/bomb.png");
 }
 
 export default preload;

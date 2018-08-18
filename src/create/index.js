@@ -30,6 +30,15 @@ function create(){
     maxSize: 30
   });
 
+  this.bombs = this.physics.add.group({
+    key:'bomb',
+    frameQuantity: 10
+  });
+
+  this.circle = new Phaser.Geom.Circle(this.player.x, this.player.y, 150);
+
+  Phaser.Actions.PlaceOnCircle(this.bombs.getChildren(), this.circle);
+
   // listen for spacebar clicks and trigger the shoot function
   this.input.keyboard.on('keydown_SPACE', (e)=>{
     const bullet = this.bullets.get(this.player.x, this.player.y);
@@ -79,6 +88,15 @@ function create(){
   }
 
   attackWave();
+
+  // detect collisions between bombs and baddies
+  this.physics.add.overlap(this.bombs, this.badguys, targetDestroyedByBomb, triggerExplosion, this);
+
+  function targetDestroyedByBomb(bomb, badguy){
+    bomb.destroy();
+    badguy.destroy();
+    Phaser.Actions.PlaceOnCircle(this.bombs.getChildren(), this.circle)
+  }
 
   // detect collisions between bullets and badguys
   this.physics.add.overlap(this.bullets, this.badguys, targetDestroy, triggerExplosion, this);
