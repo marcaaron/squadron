@@ -17,7 +17,7 @@ function create(){
   this.hp = 300;
   // initialize immunity state
   this.immunityActive = false;
-
+ 
   // set up bullet group
   this.bullets = this.physics.add.group({
     defaultKey: 'bullet',
