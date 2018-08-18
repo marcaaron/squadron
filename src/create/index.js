@@ -1,7 +1,10 @@
 import attackPatterns from './attackPatterns';
 import { targetDestroy, shoot } from './functions';
+import createAnims from './anims';
 
 function create(){
+  // Must pass reference to this.anims
+  createAnims(this.anims);
   // Create Game Objects
   this.background1 = this.add.tileSprite(800,600,1600,1200, 'background')
   // initialize player
@@ -14,26 +17,6 @@ function create(){
   this.hp = 300;
   // initialize immunity state
   this.immunityActive = false;
-
-  this.anims.create({
-    key: "forward",
-    frames: this.anims.generateFrameNumbers("player1", { start: 1, end: 3 }),
-    frameRate: 8,
-    repeat: -1
-  });
-
-  this.anims.create({
-    key: "stop",
-    frames: [{ key: "player1", frame: 0 }],
-    frameRate: 20
-  });
-
-  this.anims.create({
-    key: "explode",
-    frames: this.anims.generateFrameNumbers("explosion", { start: 0, end: 6 }),
-    frameRate: 30,
-    hideOnComplete: true
-  });
 
   // set up bullet group
   this.bullets = this.physics.add.group({
@@ -64,6 +47,7 @@ function create(){
     if(waveCount > attackPatterns.length-1){
       waveCount = 0;
     }
+
     const currentPattern = attackPatterns[waveCount];
     // if total number of enemies created = the pattern length then stop creating enemies
     if(enemyCount===currentPattern.length-1){
@@ -90,9 +74,8 @@ function create(){
     }
     // increment counter so we can spawn the next baddie
     enemyCount++;
-  // create a new bad guy every 300ms
-  }, 300)
-
+    // create a new bad guy every 300ms
+    }, 300)
   }
 
   attackWave();
