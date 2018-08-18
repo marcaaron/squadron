@@ -17,7 +17,7 @@ function create(){
   this.hp = 300;
   // initialize immunity state
   this.immunityActive = false;
- 
+
   // set up bullet group
   this.bullets = this.physics.add.group({
     defaultKey: 'bullet',
@@ -36,8 +36,6 @@ function create(){
   });
 
   this.circle = new Phaser.Geom.Circle(this.player.x, this.player.y, 150);
-
-  Phaser.Actions.PlaceOnCircle(this.bombs.getChildren(), this.circle);
 
   // listen for spacebar clicks and trigger the shoot function
   this.input.keyboard.on('keydown_SPACE', (e)=>{
@@ -95,7 +93,6 @@ function create(){
   function targetDestroyedByBomb(bomb, badguy){
     bomb.destroy();
     badguy.destroy();
-    Phaser.Actions.PlaceOnCircle(this.bombs.getChildren(), this.circle)
   }
 
   // detect collisions between bullets and badguys
@@ -152,6 +149,19 @@ function create(){
     fontSize: "32px",
     fill: "#FFF"
   });
+
+  this.startAngle = this.tweens.addCounter({
+    from: 0,
+    to: 6.28,
+    duration: 6000,
+    repeat: -1
+  })
+  this.endAngle = this.tweens.addCounter({
+    from: 6.28,
+    to: 12.56,
+    duration: 6000,
+    repeat: -1
+  })
 }
 
 export default create;
