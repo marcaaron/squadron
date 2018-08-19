@@ -85,7 +85,7 @@ function create(){
     }, 300)
   }
 
-  attackWave();
+  attackWave(); 
 
   // detect collisions between bombs and baddies
   this.physics.add.overlap(this.bombs, this.badguys, targetDestroyedByBomb, triggerExplosion, this);
